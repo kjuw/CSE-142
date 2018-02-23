@@ -1,73 +1,12 @@
 import java.util.Scanner;
 
 public class Gradanator {
-   public static void main(String[] args) {
-      int max;
-      int weight;
-      int score;
-      int shifted;
-      int shiftAmount;
-      int assignments;
-      int sections;
-      Scanner console = new Scanner(System.in);
-      System.out.println("This program reads exam/homework scores");
-      System.out.println("and reports your overall course grade.");
-      System.out.println();
-      System.out.println("Midterm:");
-      System.out.print("Weight (0-100)? ");
-      weight = console.nextInt();
-      System.out.print("Score earned? ");
-      score = console.nextInt();
-      System.out.print("Were scores shifted (1=yes, 2=no)? ");
-      shifted = console.nextInt();
-      if (shifted == 1) {
-         System.out.print("Shift amount? ");
-         shiftAmount = console.nextInt();
-         score = Math.min(score + shiftAmount, 100);
-      } 
-      System.out.println("Total points = " + score + " / 100");
-      double midtermWeightedScore = weight * (score/100.0);
-      System.out.printf("Weighted score = %.1f / " + weight + "\n", midtermWeightedScore);
-      System.out.println();
-      System.out.println("Final:");
-      System.out.print("Weight (0-100)? ");
-      weight = console.nextInt();
-      System.out.print("Score earned? ");
-      score = console.nextInt();
-      System.out.print("Were scores shifted (1=yes, 2=no)? "); 
-      shifted = console.nextInt();
-      if (shifted == 1) {
-         System.out.print("Shift amount? ");
-         shiftAmount = console.nextInt();
-         score = Math.min(score + shiftAmount, 100);
-      }
-      System.out.println("Total points = " + score + " / " + 100);
-      double finalWeightedScore = weight * score / 100.0;
-      System.out.printf("Weighted score = %.1f / " + weight + "\n", finalWeightedScore);
-      System.out.println();
-      System.out.println("Homework:");
-      System.out.print("Weight (0-100)? ");
-      weight = console.nextInt();
-      System.out.print("Number of assignments? ");
-      assignments = console.nextInt();
-      score = 0;
-      max = 0;
-      for (int i = 1; i <= assignments; i++) {
-         System.out.print("Assignment " + i + " score and max? ");
-         score += console.nextInt();
-         max += console.nextInt();
-      }
-      System.out.print("How many sections did you attend? ");
-      sections = console.nextInt();
-      int sectionPoints = Math.min(sections * 5 , 30);
-      score += sectionPoints;
-      max += 30;
-      System.out.println("Section points = " + sectionPoints + " / 30");
+   private static void printScore(int score, int max, int weight, double weightedScore) {      
       System.out.println("Total points = " + score + " / " + max);
-      double homeworkWeightedScore = 1.0 * weight * score / max;
-      System.out.printf("Weighted score = %.1f / " + weight + "\n", homeworkWeightedScore);
-      System.out.println();
-      double overallPercentage = midtermWeightedScore + finalWeightedScore + homeworkWeightedScore;
+      System.out.printf("Weighted score = %.1f / " + weight + "\n", weightedScore);
+   }
+   
+   private static void printOverallScore(double overallPercentage) {
       System.out.printf("Overall percentage = %.1f\n", overallPercentage);
       System.out.print("Your grade will be at least: ");
       if (overallPercentage >= 85) {
@@ -82,7 +21,67 @@ public class Gradanator {
       } else {
          System.out.println("0.0");
          System.out.println("You should have withdrawen from the course.");
-      }    
-       
+      }
+   }
+
+   private static double getExamScore(String name, Scanner console) {
+      double weightedExamScore;
+      System.out.println(name + ":");
+      System.out.print("Weight (0-100)? ");
+      int weight = console.nextInt();
+      System.out.print("Score earned? ");
+      int score = console.nextInt();
+      System.out.print("Were scores shifted (1=yes, 2=no)? ");
+      int shifted = console.nextInt();
+      if (shifted == 1) {
+         System.out.print("Shift amount? ");
+         int shiftAmount = console.nextInt();
+         score = Math.min(score + shiftAmount, 100);
+      } 
+      weightedExamScore = weight * (score/100.0);
+      printScore(score, 100, weight, weightedExamScore);
+      
+      return weightedExamScore;
+   }
+   
+   private static double getHomeworkScore(Scanner console) {
+      double homeworkWeightedScore;
+      System.out.println("Homework:");
+      System.out.print("Weight (0-100)? ");
+      int weight = console.nextInt();
+      System.out.print("Number of assignments? ");
+      int assignments = console.nextInt();
+      int score = 0;
+      int max = 0;
+      for (int i = 1; i <= assignments; i++) {
+         System.out.print("Assignment " + i + " score and max? ");
+         score += console.nextInt();
+         max += console.nextInt();
+      }
+      System.out.print("How many sections did you attend? ");
+      int sections = console.nextInt();
+      int sectionPoints = Math.min(sections * 5 , 30);
+      score += sectionPoints;
+      max += 30;
+      System.out.println("Section points = " + sectionPoints + " / 30");
+      homeworkWeightedScore = 1.0 * weight * score / max;
+      printScore(score, max, weight, homeworkWeightedScore);
+      
+      return homeworkWeightedScore;
+   }
+   
+   public static void main(String[] args) {
+      Scanner console = new Scanner(System.in);
+      System.out.println("This program reads exam/homework scores");
+      System.out.println("and reports your overall course grade.");
+      System.out.println();
+      double midtermWeightedScore = getExamScore("Midterm", console);
+      System.out.println();
+      double finalWeightedScore = getExamScore("Final", console);
+      System.out.println();
+      double homeworkWeightedScore = getHomeworkScore(console);
+      System.out.println();
+      double overallPercentage = midtermWeightedScore + finalWeightedScore + homeworkWeightedScore;
+      printOverallScore(overallPercentage);
    }
 }
