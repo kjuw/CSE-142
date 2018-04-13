@@ -21,7 +21,7 @@ public class Gradanator {
       } else {
          System.out.println("0.0");
          System.out.println("You should have withdrawen from the course.");
-      }
+      }  
    }
 
    private static double getExamScore(String name, Scanner console) {
@@ -70,7 +70,7 @@ public class Gradanator {
       return homeworkWeightedScore;
    }
    
-   public static void main(String[] args) {
+   public static void main(String[] args) {     
       Scanner console = new Scanner(System.in);
       System.out.println("This program reads exam/homework scores");
       System.out.println("and reports your overall course grade.");

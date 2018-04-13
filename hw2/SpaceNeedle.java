@@ -2,7 +2,7 @@ public class SpaceNeedle {
    static final int SIZE = 4;
    
    public static void main(String[] args) {
-      pole();
+       pole();
       top();
       bottom();
       pole();
